@@ -1,6 +1,6 @@
 package com.polarnick.javahomework.task6.tasks;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Date: 02.04.14 at 18:41
@@ -10,15 +10,9 @@ import java.util.Random;
 public class SleepingTaskFactory extends TaskFactory<Long, Long> {
 
     private final int maxTimeToSleepMs;
-    private final Random random;
 
     public SleepingTaskFactory(int maxTimeToSleepMs) {
-        this(maxTimeToSleepMs, 239);
-    }
-
-    public SleepingTaskFactory(int maxTimeToSleepMs, int seed) {
         this.maxTimeToSleepMs = maxTimeToSleepMs;
-        this.random = new Random(seed);
     }
 
     @Override
@@ -28,17 +22,7 @@ public class SleepingTaskFactory extends TaskFactory<Long, Long> {
 
     @Override
     public Long createArgument() {
-        return (long) (random.nextInt(maxTimeToSleepMs) + 1);
-    }
-
-    @Override
-    public String toStringResult(Long result) {
-        return result.toString();
-    }
-
-    @Override
-    public String toStringArgument(Long argument) {
-        return argument.toString();
+        return (long) (ThreadLocalRandom.current().nextInt(maxTimeToSleepMs) + 1);
     }
 
 }

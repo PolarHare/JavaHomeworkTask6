@@ -15,10 +15,12 @@ public class Utils {
 
     public static void log(boolean toLog, String message) {
         if (toLog) {
-            if (message.length() > MAX_MESSAGE_LENGTH) {
-                System.out.println(message.substring(0, MAX_MESSAGE_LENGTH - CUTTED_STRING_SUFFIX.length()) + CUTTED_STRING_SUFFIX);
-            } else {
-                System.out.println(message);
+            synchronized (System.out) {
+                if (message.length() > MAX_MESSAGE_LENGTH) {
+                    System.out.println(System.currentTimeMillis() + ": " + message.substring(0, MAX_MESSAGE_LENGTH - CUTTED_STRING_SUFFIX.length()) + CUTTED_STRING_SUFFIX);
+                } else {
+                    System.out.println(System.currentTimeMillis() + ": " + message);
+                }
             }
         }
     }

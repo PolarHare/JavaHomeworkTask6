@@ -11,8 +11,4 @@ public abstract class TaskFactory<Result, Param> {
 
     public abstract Param createArgument();
 
-    public abstract String toStringResult(Result result);
-
-    public abstract String toStringArgument(Param argument);
-
 }

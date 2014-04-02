@@ -33,9 +33,9 @@ public class Client<Result, Param> implements Runnable {
             try {
                 Task<Result, Param> task = taskFactory.createTask();
                 Param argument = taskFactory.createArgument();
-                Utils.log(TO_LOG, "Client " + id + ":\ttask queued with argument = " + taskFactory.toStringArgument(argument));
+                Utils.log(TO_LOG, "Client " + id + ":\ttask queued with argument = " + argument);
                 Result result = taskRunner.run(task, argument);
-                Utils.log(TO_LOG, "Client " + id + ":\ttask executed with result = " + taskFactory.toStringResult(result));
+                Utils.log(TO_LOG, "Client " + id + ":\ttask executed with result = " + result);
             } catch (InterruptedException ignored) {
                 finished = true;
             } catch (ExecutionException e) {
