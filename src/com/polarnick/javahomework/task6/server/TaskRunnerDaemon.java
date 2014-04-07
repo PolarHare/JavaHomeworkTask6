@@ -1,25 +1,29 @@
 package com.polarnick.javahomework.task6.server;
 
-        import com.polarnick.javahomework.task6.tasks.Task;
-        import com.polarnick.javahomework.task6.utils.Utils;
+import com.polarnick.javahomework.task6.tasks.Task;
+import com.polarnick.javahomework.task6.utils.Utils;
 
-        import java.util.concurrent.*;
+import java.util.concurrent.*;
 
 /**
  * Date: 02.04.14 at 17:42
  *
  * @author Nickolay Polyarniy aka PolarNick
  */
-public class TaskRunnerImpl implements TaskRunner, Runnable {
+public class TaskRunnerDaemon implements TaskRunner, Runnable {
 
     private static final boolean TO_LOG = true;
 
     private final int id;
+    private final int threadsCount;
     private final BlockingQueue<FutureTask<?>> taskQueue;
 
-    public TaskRunnerImpl(int id) {
+    private volatile boolean alreadyStarted = false;
+
+    public TaskRunnerDaemon(int id, int threadsCount) {
         this.id = id;
-        taskQueue = new LinkedBlockingQueue<>();
+        this.threadsCount = threadsCount;
+        this.taskQueue = new LinkedBlockingQueue<>();
     }
 
     @Override
@@ -32,6 +36,18 @@ public class TaskRunnerImpl implements TaskRunner, Runnable {
             } catch (InterruptedException e) {
                 finished = true;
             }
+        }
+    }
+
+    public synchronized void start() {
+        if (alreadyStarted) {
+            throw new IllegalStateException("This " + TaskRunnerDaemon.class.getSimpleName() + " already started!");
+        }
+        alreadyStarted = true;
+        for (int i = 0; i < threadsCount; i++) {
+            Thread thread = new Thread(this, "TaskRunnerDaemon id=" + id + " threadId=" + i);
+            thread.setDaemon(true);
+            thread.start();
         }
     }
 
