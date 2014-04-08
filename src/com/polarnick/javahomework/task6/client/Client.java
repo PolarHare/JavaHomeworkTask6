@@ -5,8 +5,6 @@ import com.polarnick.javahomework.task6.tasks.Task;
 import com.polarnick.javahomework.task6.tasks.TaskFactory;
 import com.polarnick.javahomework.task6.utils.Utils;
 
-import java.util.concurrent.ExecutionException;
-
 /**
  * Date: 02.04.14 at 17:41
  *
@@ -28,18 +26,15 @@ public class Client<Result, Param> implements Runnable {
 
     @Override
     public void run() {
-        boolean finished = false;
-        while (!finished) {
+        while (!Thread.currentThread().isInterrupted()) {
             try {
                 Task<Result, Param> task = taskFactory.createTask();
                 Param argument = taskFactory.createArgument();
-                Utils.log(TO_LOG, "Client " + id + ":\ttask queued with argument = " + argument);
+                Utils.log(TO_LOG, "Client " + id + ":\ttask will be executed with argument = " + argument);
                 Result result = taskRunner.run(task, argument);
                 Utils.log(TO_LOG, "Client " + id + ":\ttask executed with result = " + result);
-            } catch (InterruptedException ignored) {
-                finished = true;
-            } catch (ExecutionException e) {
-                throw new IllegalStateException(e);
+            } catch (InterruptedException interrupted) {
+                Thread.currentThread().interrupt();
             }
         }
     }
