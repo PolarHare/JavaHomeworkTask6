@@ -1,9 +1,7 @@
 package com.polarnick.javahomework.task6.server;
 
 import com.polarnick.javahomework.task6.tasks.Task;
-import com.polarnick.javahomework.task6.utils.Utils;
-
-import java.util.concurrent.*;
+import com.polarnick.javahomework.task6.utils.*;
 
 /**
  * Date: 02.04.14 at 17:42
@@ -16,7 +14,7 @@ public class TaskRunnerDaemon implements TaskRunner {
 
     private final int id;
     private final int threadsCount;
-    private final BlockingQueue<FutureTask<?>> taskQueue;
+    private final LinkedBlockingQueue<FutureTask<?>> taskQueue;
 
     private volatile boolean alreadyStarted = false;
 
